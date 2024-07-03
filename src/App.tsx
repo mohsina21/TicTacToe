@@ -5,7 +5,7 @@
  * @format
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
@@ -16,82 +16,104 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
+import Snackbar from 'react-native-snackbar';
+import icons from './components/icons';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-function Section({children, title}: SectionProps): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-}
 
 function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+  const [isCross, setCross]= useState<boolean>(false)
+  const [gamewinner,setgamewinner]= useState<string>('')
+  const [gameState,setgameState] = useState (new Array(9).fill('empty',0,9))
+  const reloadGame = ( )=> {
+    setCross(false)
+    setgamewinner('')
+      setgameState(new Array(9).fill('empty',0,9))
+    
+  }
+  const checkIsWinner = ()=>{
+    if (
+      gameState[0] === gameState[1] &&
+      gameState[0] === gameState[2] &&
+      gameState[0] !== 'empty'
+    ) {
+      setgamewinner(`${gameState[0]} won the game! 🥳`);
+    } else if (
+      gameState[3] !== 'empty' &&
+      gameState[3] === gameState[4] &&
+      gameState[4] === gameState[5]
+    ) {
+      setgamewinner(`${gameState[3]} won the game! 🥳`);
+    } else if (
+      gameState[6] !== 'empty' &&
+      gameState[6] === gameState[7] &&
+      gameState[7] === gameState[8]
+    ) {
+      setgamewinner(`${gameState[6]} won the game! 🥳`);
+    } else if (
+      gameState[0] !== 'empty' &&
+      gameState[0] === gameState[3] &&
+      gameState[3] === gameState[6]
+    ) {
+      setgamewinner(`${gameState[0]} won the game! 🥳`);
+    } else if (
+      gameState[1] !== 'empty' &&
+      gameState[1] === gameState[4] &&
+      gameState[4] === gameState[7]
+    ) {
+      setgamewinner(`${gameState[1]} won the game! 🥳`);
+    } else if (
+      gameState[2] !== 'empty' &&
+      gameState[2] === gameState[5] &&
+      gameState[5] === gameState[8]
+    ) {
+      setgamewinner(`${gameState[2]} won the game! 🥳`);
+    } else if (
+      gameState[0] !== 'empty' &&
+      gameState[0] === gameState[4] &&
+      gameState[4] === gameState[8]
+    ) {
+      setgamewinner(`${gameState[0]} won the game! 🥳`);
+    } else if (
+      gameState[2] !== 'empty' &&
+      gameState[2] === gameState[4] &&
+      gameState[4] === gameState[6]
+    ) {
+      setgamewinner(`${gameState[2]} won the game! 🥳`);
+    } else if (!gameState.includes('empty', 0)) {
+      setgamewinner('Draw game... ⌛️');
+    }
+  }
+  const onChangeItenm = (itemNumber : number)=>{
+    if (gamewinner){
+      return Snackbar.show({
+        text: gamewinner,
+        backgroundColor: '#00000',
+        textColor: '#FFFFFF'
+      })
+    }
+    if (gameState[itemNumber]==='empty'){
+      gameState[itemNumber]= isCross? 'cross':'circle'
+      setCross(!isCross)
+    }
+    else{
+      return Snackbar.show({
+        text: "Position is already filled",
+        backgroundColor: 'purple',
+        textColor: '#FFF'
+      })
+    }
+    checkIsWinner()
+  }
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-        backgroundColor={backgroundStyle.backgroundColor}
-      />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.tsx</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
+    <SafeAreaView >
+    <StatusBar />
+    <View>
+      <Text>
+        tic tac toe
+      </Text>
+    </View>
+     
     </SafeAreaView>
   );
 }
