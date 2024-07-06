@@ -1,9 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+
 
 import React, { useState } from 'react';
 import type {PropsWithChildren} from 'react';
@@ -19,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import Snackbar from 'react-native-snackbar';
+
 import icons from './components/icons';
 
 
@@ -115,7 +111,7 @@ function App(): React.JSX.Element {
         <Text style = {styles.winnerTxt}> {gamewinner}</Text>
       </View>
     ):(
-      <View style = {[styles.playerInfo, isCross? styles.playerX : styles.player0]}>
+      <View style = {[styles.playerInfo, isCross? styles.playerX : styles.playerO]}>
         <Text>
           Player {isCross? 'X': '0' } 's Turn
         </Text>
